@@ -1,0 +1,62 @@
+<div *ngIf="!isDetailPage" class="carousel-container">
+  <div
+    class="carousel-track"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+    [style.transform]="transformStyle"
+    [style.transition]="transitionStyle"
+  >
+    <div
+      class="carousel-slide"
+      *ngFor="let img of visibleImages; let i = index"
+    >
+      <div class="left-solid"></div>
+      <div class="image-container">
+        <img [src]="img.imgUrl" class="carousel-img" />
+        <div class="gradient-horizontal"></div>
+        <div class="gradient-vertical"></div>
+
+        <!-- Overlay Content -->
+        <div class="overlay-content">
+          <h1>{{ img.heading }}</h1>
+          <p>{{ img.description }}</p>
+
+          <ul *ngIf="img.points.length > 0">
+            <li *ngFor="let point of img.points">{{ point }}</li>
+          </ul>
+
+          <div class="button-group">
+            <button
+              *ngFor="let btn of img.buttons"
+              (click)="btn.label === 'More Info' ? goToDetail(i) : null"
+            >
+              <img
+                [src]="btn.iconPath"
+                alt="{{ btn.label }}"
+                class="btn-icon"
+              />
+              <span>{{ btn.label }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="nav left" (click)="prev()">
+    <img src="assets/prev.svg" />
+  </button>
+  <button class="nav right" (click)="next()">
+    <img src="assets/next.svg" />
+  </button>
+
+  <div class="indicators">
+    <span
+      *ngFor="let img of images; let i = index"
+      class="dot"
+      [class.active]="i === currentIndex"
+      (click)="goTo(i)"
+    ></span>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="detail-container">
+  <div class="poster-container">
+    <div class="image-wrapper">
+      <img [src]="data?.imgUrl" class="full-img" />
+      <div class="gradient-horizontal"></div>
+      <div class="gradient-vertical"></div>
+    </div>
+
+    <div class="overlay-content">
+      <h1>{{ data?.heading }}</h1>
+      <p>{{ data?.description }}</p>
+      <div class="button-group">
+        <button *ngFor="let btn of data?.buttons">
+          <img [src]="btn.iconPath" alt="{{ btn.label }}" class="btn-icon" />
+          {{ btn.label }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Episodes Section -->
+  <app-episode-slider [slideId]="id" />
+</div>

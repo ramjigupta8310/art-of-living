@@ -1,0 +1,73 @@
+.episode-section {
+  background-color: #100E22;
+  padding: 1rem;
+}
+
+.episode-section h2 {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.slider-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.episode-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.episode-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.episode-card {
+  min-width: 200px;
+  flex-shrink: 0;
+  color: white;
+}
+
+.thumbnail {
+  position: relative;
+}
+.thumbnail img:first-child {
+  width: 100%;
+  border-radius: 8px;
+}
+.pause-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+}
+
+.title {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.nav {
+  position: absolute;
+  top: 35%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  z-index: 1;
+}
+
+.nav.left {
+  left: 0;
+}
+.nav.right {
+  right: 0;
+}
+
+.nav img {
+  width: 24px;
+}

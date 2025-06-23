@@ -1,0 +1,23 @@
+<div *ngIf="episodes.length > 0" class="episode-section">
+  <h2>Episodes</h2>
+
+  <div class="slider-container">
+    <button *ngIf="canScrollLeft" class="nav left" (click)="scrollLeft()">
+      <img src="assets/prev.svg" />
+    </button>
+
+    <div #slider class="episode-slider">
+      <div class="episode-card" *ngFor="let ep of episodes">
+        <div class="thumbnail">
+          <img [src]="ep.thumbnail" />
+          <img src="assets/pause.svg" class="pause-icon" />
+        </div>
+        <p class="title">{{ ep.title }}</p>
+      </div>
+    </div>
+
+    <button *ngIf="canScrollRight" class="nav right" (click)="scrollRight()">
+      <img src="assets/next.svg" />
+    </button>
+  </div>
+</div>
