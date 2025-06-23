@@ -3,21 +3,24 @@
 
   <div class="slider-container">
     <button *ngIf="canScrollLeft" class="nav left" (click)="scrollLeft()">
-      <img src="assets/prev.svg" />
+      <img src="assets/orange-prev.svg" />
     </button>
 
     <div #slider class="episode-slider">
       <div class="episode-card" *ngFor="let ep of episodes">
         <div class="thumbnail">
           <img [src]="ep.thumbnail" />
-          <img src="assets/pause.svg" class="pause-icon" />
+
+          <div class="pause-icon">
+            <img src="assets/pause.svg" />
+          </div>
         </div>
         <p class="title">{{ ep.title }}</p>
       </div>
     </div>
 
     <button *ngIf="canScrollRight" class="nav right" (click)="scrollRight()">
-      <img src="assets/next.svg" />
+      <img src="assets/orange-next.svg" />
     </button>
   </div>
 </div>

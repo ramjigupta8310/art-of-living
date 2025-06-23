@@ -18,7 +18,20 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit {
   allEpisodes: { [key: number]: { title: string; thumbnail: string; }[] } = {
     1: [
       { title: 'Episode 1', thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg' },
-      { title: 'Episode 2', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' }
+
+      { title: 'Episode 2', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' },
+
+      { title: 'Episode 3', thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg' },
+
+      { title: 'Episode 4', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' },
+
+      { title: 'Episode 5', thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg' },
+
+      { title: 'Episode 6', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' },
+
+      { title: 'Episode 7', thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg' },
+
+      { title: 'Episode 8', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' }
     ],
     // 3: [
     //   { title: 'Season 2 - Episode 1', thumbnail: 'assets/thumb3.jpg' },
