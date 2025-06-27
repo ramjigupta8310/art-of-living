@@ -33,10 +33,12 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit {
 
       { title: 'Episode 8', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' }
     ],
-    // 3: [
-    //   { title: 'Season 2 - Episode 1', thumbnail: 'assets/thumb3.jpg' },
-    //   { title: 'Season 2 - Episode 2', thumbnail: 'assets/thumb4.jpg' }
-    // ]
+    3: [
+      { title: 'Episode 1', thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg' },
+
+      { title: 'Episode 2', thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg' }
+
+    ]
   };
 
   ngOnInit() {
@@ -44,8 +46,12 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.checkScrollButtons();
-    this.slider.nativeElement.addEventListener('scroll', () => this.checkScrollButtons());
+    setTimeout(() => {
+      if (this.slider) {
+        this.checkScrollButtons();
+        this.slider.nativeElement.addEventListener('scroll', () => this.checkScrollButtons());
+      }
+    });
   }
 
   scrollLeft() {

@@ -5,6 +5,7 @@
 
 .image-wrapper {
   position: relative;
+  height: 100vh;
 }
 
 .full-img {
@@ -90,6 +91,10 @@
 }
 
 @media screen and (max-width: 992px) {
+  .image-wrapper {
+    height: auto;
+  }
+
   .gradient-horizontal {
     display: none;
   }
@@ -129,5 +134,3 @@
     line-height: 1.5;
   }
 }
-
-/* Episodes Section */

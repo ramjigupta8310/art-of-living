@@ -1,6 +1,6 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router'; // Angular ki built-in service hai, jo route info deti hai
 import { EpisodeSliderComponent } from '../../components/episode-slider/episode-slider.component';
 
 @Component({
@@ -10,9 +10,9 @@ import { EpisodeSliderComponent } from '../../components/episode-slider/episode-
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent {
-  data: any;
-  id!: number;
+export class DetailComponent implements OnInit {
+  data: any; // isme selected slide ka full object store hoga
+  CurrentId!: number; // isme route se aaya hua id number store hoga
 
   images = [
     {
@@ -147,9 +147,25 @@ export class DetailComponent {
     },
   ];
 
-  constructor(private route: ActivatedRoute) {
-    const id = +this.route.snapshot.paramMap.get('id')!;
-    this.id = id;
-    this.data = this.images[id - 1];
+  // 1. ActivatedRoute Angular ki built-in service hai jo current route ki information deti hai
+  // 2. ActivatedRoute ek built-in service hai jise hum dependency injection mechanism ke through constructor me inject karte hain
+  // 3. constructor ek special function hota hai jisme Angular ki services ko dependency injection mechanism ke through inject kiya jata hai
+  // 4. private route: ActivatedRoute → yahan 'route' ek variable hai jiska type ActivatedRoute hai
+  // 5. hume ActivatedRoute ka reference 'route' variable se milta hai jisse hum route ke params access kar pate hain
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    // 1. paramMap → ActivatedRoute ka ek RxJS observable property hai jo route params ko observe karta hai
+    // 2. .subscribe() → RxJS ka method hai jo observable (paramMap) se data listen karta hai aur jaise hi ise data milta hai to iske andar ka code run karta hai
+    // 3. params.get('id') → 'id' route param ko get karta hai
+    // 4. Number(...) → string id ko number me convert karta hai
+    // 5. this.CurrentId = id → id ko local variable me store kar rahe hain
+    // 6. this.data = this.images[id - 1] → id ke basis par data array se object le rahe hain
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      this.CurrentId = id;
+      this.data = this.images[id - 1];
+    });
   }
 }
