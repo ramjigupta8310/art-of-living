@@ -1,3 +1,15 @@
+<div *ngIf="selectedVideoUrl" class="video-wrapper">
+  <video
+    id="episode-player"
+    class="video-js vjs-default-skin vjs-16-9"
+    controls
+    preload="auto"
+    #videoPlayer
+  >
+    <source [src]="selectedVideoUrl" type="video/mp4" />
+  </video>
+</div>
+
 <div *ngIf="episodes.length > 0" class="episode-section">
   <h2>Episodes</h2>
 
@@ -7,7 +19,11 @@
     </button>
 
     <div #slider class="episode-slider">
-      <div class="episode-card" *ngFor="let ep of episodes">
+      <div
+        class="episode-card"
+        *ngFor="let ep of episodes"
+        (click)="playVideo(ep.videoUrl)"
+      >
         <div class="thumbnail">
           <img [src]="ep.thumbnail" />
 
