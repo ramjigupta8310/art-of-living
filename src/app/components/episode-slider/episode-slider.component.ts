@@ -1,15 +1,21 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import videojs from 'video.js';
 import type Player from 'video.js/dist/types/player';
+
+
+// An interface is a powerful feature provided by TypeScript that allows to define the structure or shape of an object
+interface Episode {
+  title: string;
+  thumbnail: string;
+  videoUrl: string;
+}
+
+interface AllEpisodes {
+  // Jab key ka exact naam fix nahi hota (dynamic hoti hai) aur sirf uska type pata hota hai (yaha number),
+  // tab use [] ke andar likha jata hai. Value yaha Episode[] (array of objects) hoti hai.
+  [key: number]: Episode[];
+}
 
 @Component({
   selector: 'app-episode-slider',
@@ -18,18 +24,10 @@ import type Player from 'video.js/dist/types/player';
   templateUrl: './episode-slider.component.html',
   styleUrl: './episode-slider.component.css',
 })
+
 export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() slideId!: number;
-  @ViewChild('slider') slider!: ElementRef;
-  @ViewChild('videoPlayer', { static: false }) videoPlayerRef!: ElementRef;
 
-  player!: Player;
-  episodes: any[] = [];
-  canScrollLeft = false;
-  canScrollRight = true;
-  selectedVideoUrl: string | null = null;
-
-  allEpisodes: { [key: number]: { title: string; thumbnail: string; videoUrl: string }[] } = {
+  allEpisodes: AllEpisodes = {
     1: [
       {
         title: 'Episode 1',
@@ -40,37 +38,34 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
         title: 'Episode 2',
         thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/movie.mp4'
-      }, {
-        title: 'Episode 1',
+      }, 
+      {
+        title: 'Episode 3',
         thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
       },
       {
-        title: 'Episode 2',
+        title: 'Episode 4',
         thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/movie.mp4'
-      }, {
-        title: 'Episode 1',
+      },
+      {
+        title: 'Episode 5',
         thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
       },
       {
-        title: 'Episode 2',
+        title: 'Episode 6',
         thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/movie.mp4'
+      }, 
+      {
+        title: 'Episode 7',
+        thumbnail: 'https://cdn.pixabay.com/photo/2024/12/19/17/48/mountain-9278324_640.jpg',
+        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
       },
       {
-        title: 'Episode 2',
-        thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
-        videoUrl: 'https://www.w3schools.com/html/movie.mp4'
-      },
-      {
-        title: 'Episode 2',
-        thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
-        videoUrl: 'https://www.w3schools.com/html/movie.mp4'
-      },
-      {
-        title: 'Episode 2',
+        title: 'Episode 8',
         thumbnail: 'https://cdn.pixabay.com/photo/2025/03/03/17/47/cliffs-9444605_640.jpg',
         videoUrl: 'https://www.w3schools.com/html/movie.mp4'
       }
@@ -89,8 +84,19 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
     ]
   };
 
+  // @Input() is a decorator used to define a component property that can receive data from its parent component
+  @Input() slideId!: number;
+  @ViewChild('slider') slider!: ElementRef;
+  @ViewChild('videoPlayer', { static: false }) videoPlayerRef!: ElementRef;
+
+  player!: Player;
+  episodes: Episode [] = [];
+  canScrollLeft = false;
+  canScrollRight = true;
+  selectedVideoUrl: string | null = null;
+
   ngOnInit() {
-    this.episodes = this.allEpisodes[this.slideId] || [];
+    this.episodes = this.allEpisodes[this.slideId];
 
     // wait for DOM to render episode cards
     setTimeout(() => this.checkScrollButtons(), 0);
@@ -110,16 +116,16 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
     this.slider.nativeElement.scrollLeft += 300;
   }
 
-checkScrollButtons() {
-  const el = this.slider.nativeElement;
+  checkScrollButtons() {
+    const el = this.slider.nativeElement;
 
-  const scrollLeft = el.scrollLeft;
-  const visibleWidth = el.offsetWidth;
-  const totalScrollWidth = el.scrollWidth;
+    const scrollLeft = el.scrollLeft;
+    const visibleWidth = el.offsetWidth;
+    const totalScrollWidth = el.scrollWidth;
 
-  this.canScrollLeft = scrollLeft > 0;
-  this.canScrollRight = scrollLeft + visibleWidth < totalScrollWidth - 1;
-}
+    this.canScrollLeft = scrollLeft > 0;
+    this.canScrollRight = scrollLeft + visibleWidth < totalScrollWidth - 1;
+  }
 
 
   playVideo(url: string) {
