@@ -1,7 +1,7 @@
 <div *ngIf="selectedVideoUrl" class="video-wrapper">
   <video
     id="episode-player"
-    class="video-js vjs-default-skin vjs-16-9"
+    class="video-js vjs-default-skin"
     controls
     preload="auto"
     #videoPlayer
@@ -14,9 +14,11 @@
   <h2>Episodes</h2>
 
   <div class="slider-container">
-    <button *ngIf='canScrollLeft' class="nav left" (click)="scrollLeft()">
+    <button *ngIf="canScrollLeft" class="nav left" (click)="scrollLeft()">
       <img src="assets/orange-prev.svg" />
     </button>
+
+    <!-- #slider is an Angular template reference variable. It allows access to this DOM element inside the component class using @ViewChild. It is NOT a CSS ID, so it cannot be used in styles like #slider { ... }. -->
 
     <div #slider class="episode-slider">
       <div

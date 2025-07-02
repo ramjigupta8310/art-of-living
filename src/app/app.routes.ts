@@ -3,7 +3,6 @@
 
 import { Routes } from '@angular/router';
 
-import { DetailComponent } from './pages/detail/detail.component';
 import { HomeComponent } from './pages/home/home.component';
 
 // Yaha `routes` naam ka ek variable banaya gaya hai

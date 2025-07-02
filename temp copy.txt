@@ -155,13 +155,14 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
         this.player.src({ type: 'video/mp4', src: url });
         this.player.play();
 
-        this.addSkipButtons();
+        this.addSkipBackwardButton();
+        this.addSkipForwardButton();
         this.addcloseButton();
       }
     });
   }
 
-  addSkipButtons() {
+  addSkipBackwardButton() {
     const Button = videojs.getComponent('Button');
     const appRef = this;
 
@@ -171,11 +172,11 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
         this.addClass('vjs-skip-backward-button');
         (this as any).controlText?.('Back 5s');
         (this.contentEl() as HTMLElement).innerHTML = `
-          <div class="custom-skip-button">
-            <img src="assets/skip-previous.svg" class="skip-icon" />
-            <span class="skip-text">5s</span>
-          </div>
-        `;
+        <div class="custom-skip-button">
+          <img src="assets/skip-previous.svg" class="skip-icon" />
+          <span class="skip-text">5s</span>
+        </div>
+      `;
       }
       handleClick() {
         const newTime = Math.max(0, appRef.player.currentTime()! - 5);
@@ -183,17 +184,62 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     };
 
-    const SkipForward = class extends Button {
+    videojs.registerComponent('SkipBack', SkipBack);
+    this.player.addChild('SkipBack', {});
+
+    const button = this.player.el()?.querySelector('.vjs-skip-backward-button') as HTMLElement;
+    if (button && !(button as any)._hoverAttached) {
+      let intervalId: any = null;
+
+      button.addEventListener('mouseenter', () => {
+        this.player.userActive(true);
+        intervalId = setInterval(() => {
+          if (button.matches(':hover')) {
+            this.player.userActive(true);
+          }
+        }, 100);
+      });
+
+      button.addEventListener('mouseleave', () => {
+        clearInterval(intervalId);
+      });
+
+      (button as any)._hoverAttached = true;
+    }
+
+    const updateVisibility = () => {
+      const isPaused = this.player.paused();
+      const isActive = this.player.userActive();
+      const isHovered = button?.matches(':hover');
+
+      if (isPaused || isActive || isHovered) {
+        button.style.opacity = '1';
+        button.style.pointerEvents = 'auto';
+      } else {
+        button.style.opacity = '0';
+        button.style.pointerEvents = 'none';
+      }
+    };
+
+    this.player.on('useractive', updateVisibility);
+    this.player.on('userinactive', updateVisibility);
+  }
+
+  addSkipForwardButton() {
+    const Button = videojs.getComponent('Button');
+    const appRef = this;
+
+    const SkipForwardGupta = class extends Button {
       constructor(player: any, options: any) {
         super(player, options);
-        this.addClass('vjs-skip-forward-button');
+        this.addClass('vjs-skip-ramji-button');
         (this as any).controlText?.('Forward 5s');
         (this.contentEl() as HTMLElement).innerHTML = `
-          <div class="custom-skip-button">
-            <span class="skip-text">5s</span>
-            <img src="assets/skip-next.svg" class="skip-icon" />
-          </div>
-        `;
+        <div class="custom-skip-button">
+          <span class="skip-text">5s</span>
+          <img src="/assets/skip-next.svg" class="skip-icon" />
+        </div>
+      `;
       }
       handleClick() {
         const duration = appRef.player.duration();
@@ -202,56 +248,43 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     };
 
-    videojs.registerComponent('SkipBack', SkipBack);
-    videojs.registerComponent('SkipForward', SkipForward);
-    this.player.addChild('SkipBack', {});
-    this.player.addChild('SkipForward', {});
+    videojs.registerComponent('SkipForwardRamji', SkipForwardGupta);
+    this.player.addChild('SkipForwardRamji', {});
 
-    const container = this.player.el() as HTMLElement;
-    const skipButtons = container.querySelectorAll('.vjs-skip-backward-button, .vjs-skip-forward-button');
+    const button = this.player.el()?.querySelector('.vjs-skip-ramji-button') as HTMLElement;
+    if (button && !(button as any)._hoverAttached) {
+      let intervalId: any = null;
 
-    const attachHoverListeners = () => {
-      skipButtons.forEach((btn) => {
-        const button = btn as HTMLElement;
-        if (!(button as any)._hoverAttached) {
-          let intervalId: any = null;
-
-          button.addEventListener('mouseenter', () => {
+      button.addEventListener('mouseenter', () => {
+        this.player.userActive(true);
+        intervalId = setInterval(() => {
+          if (button.matches(':hover')) {
             this.player.userActive(true);
-            intervalId = setInterval(() => {
-              if (button.matches(':hover')) {
-                this.player.userActive(true);
-              }
-            }, 100);
-          });
-
-          button.addEventListener('mouseleave', () => {
-            clearInterval(intervalId);
-          });
-
-          (button as any)._hoverAttached = true;
-        }
+          }
+        }, 100);
       });
-    };
+
+      button.addEventListener('mouseleave', () => {
+        clearInterval(intervalId);
+      });
+
+      (button as any)._hoverAttached = true;
+    }
 
     const updateVisibility = () => {
       const isPaused = this.player.paused();
       const isActive = this.player.userActive();
-      const isHovered = Array.from(skipButtons).some(btn => (btn as HTMLElement).matches(':hover'));
+      const isHovered = button?.matches(':hover');
 
-      skipButtons.forEach((btn) => {
-        const el = btn as HTMLElement;
-        if (isPaused || isActive || isHovered) {
-          el.style.opacity = '1';
-          el.style.pointerEvents = 'auto';
-        } else {
-          el.style.opacity = '0';
-          el.style.pointerEvents = 'none';
-        }
-      });
+      if (isPaused || isActive || isHovered) {
+        button.style.opacity = '1';
+        button.style.pointerEvents = 'auto';
+      } else {
+        button.style.opacity = '0';
+        button.style.pointerEvents = 'none';
+      }
     };
 
-    attachHoverListeners();
     this.player.on('useractive', updateVisibility);
     this.player.on('userinactive', updateVisibility);
   }
@@ -260,6 +293,9 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
     const Button = videojs.getComponent('Button');
     const appRef = this;
 
+    /*
+    yha "Close" naam ki ek custom class ban rahi hai, jo Video.js ke "Button" class ko inherit kar rahi hai "extends Button" ka matlab hai ki Close class me Button ke sare methods aur properties available honge isse hum custom button bana sakte hain, lekin usme Button wali base functionality bhi rahegi
+    */
     const Close = class extends Button {
       constructor(player: any, options: any) {
         super(player, options);
@@ -297,3 +333,63 @@ export class EpisodeSliderComponent implements OnInit, AfterViewInit, OnDestroy 
     this.player?.dispose();
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//html
+
+<div *ngIf="selectedVideoUrl" class="video-wrapper">
+  <video
+    id="episode-player"
+    class="video-js vjs-default-skin"
+    controls
+    preload="auto"
+    #videoPlayer
+  >
+    <source [src]="selectedVideoUrl" type="video/mp4" />
+  </video>
+</div>
+
+<div *ngIf="episodes.length > 0" class="episode-section">
+  <h2>Episodes</h2>
+
+  <div class="slider-container">
+    <button *ngIf="canScrollLeft" class="nav left" (click)="scrollLeft()">
+      <img src="assets/orange-prev.svg" />
+    </button>
+
+    <!-- #slider is an Angular template reference variable. It allows access to this DOM element inside the component class using @ViewChild. It is NOT a CSS ID, so it cannot be used in styles like #slider { ... }. -->
+
+    <div #slider class="episode-slider">
+      <div
+        class="episode-card"
+        *ngFor="let ep of episodes"
+        (click)="playVideo(ep.videoUrl)"
+      >
+        <div class="thumbnail">
+          <img [src]="ep.thumbnail" />
+
+          <div class="pause-icon">
+            <img src="assets/pause.svg" />
+          </div>
+        </div>
+        <p class="title">{{ ep.title }}</p>
+      </div>
+    </div>
+
+    <button *ngIf="canScrollRight" class="nav right" (click)="scrollRight()">
+      <img src="assets/orange-next.svg" />
+    </button>
+  </div>
+</div>

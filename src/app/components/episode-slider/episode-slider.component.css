@@ -1,3 +1,7 @@
+#episodeSlider {
+  border: 5px solid yellow;
+}
+
 .episode-section {
   background-color: #100e22;
   padding: 1rem 0 2rem 2.5rem;
@@ -19,14 +23,20 @@
   gap: 1rem;
 }
 
+.episode-slider {
+  scrollbar-width: none; /* Firefox-specific */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
 .episode-slider::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .episode-card {
   width: 220px;
   flex-shrink: 0;
   color: white;
+  cursor: pointer;
 }
 
 .thumbnail {
@@ -120,19 +130,20 @@
 
 .video-wrapper {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   z-index: 9999;
-  width: 50%;
+  width: 100%;
+  height: 100%;
 }
 
 .video-js {
   width: 100%;
+  height: 100%;
 }
 
 ::ng-deep .vjs-skip-backward-button,
-::ng-deep .vjs-skip-forward-button {
+::ng-deep .vjs-skip-ramji-button {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
@@ -163,11 +174,28 @@
 }
 
 /* Forward button right 10% */
-::ng-deep .vjs-skip-forward-button {
+::ng-deep .vjs-skip-ramji-button {
   right: 10% !important;
 }
 
-::ng-deep .video-js:not(.vjs-has-started) .vjs-skip-backward-button,
+/* ::ng-deep .video-js:not(.vjs-has-started) .vjs-skip-backward-button,
 ::ng-deep .video-js:not(.vjs-has-started) .vjs-skip-forward-button {
   display: none !important;
+} */
+
+/* video close icon */
+::ng-deep .vjs-video-close-button {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 9999 !important;
+  width: 40px !important;
+  height: 40px !important;
+  cursor: pointer;
+  transition: opacity 01s ease !important;
+}
+
+::ng-deep .close-icon {
+  height: 100% !important;
+  width: 100% !important;
 }
